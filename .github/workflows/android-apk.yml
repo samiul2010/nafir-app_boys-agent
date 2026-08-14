@@ -21,7 +21,7 @@ jobs:
 
       - name: Build with Buildozer
         id: buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+        uses: ArtemSBulgakov/buildozer-action@v2
         with:
           buildozer_version: stable
           command: buildozer android debug
