@@ -15,6 +15,10 @@ android.minapi = 24
 android.ndk = 25b
 android.ndk_api = 24
 android.archs = armeabi-v7a, arm64-v8a
+
+# Use the upstream p4a fix for stale/corrupted build venv pip files.
+p4a.branch = develop
+p4a.commit = 0382d27de2f7315ed98e74884bafb30365decdee
 android.private_storage = True
 android.accept_sdk_license = True
 android.allow_backup = False
