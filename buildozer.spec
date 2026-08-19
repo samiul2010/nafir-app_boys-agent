@@ -10,9 +10,10 @@ orientation = portrait
 fullscreen = 0
 android.permissions = INTERNET,RECORD_AUDIO
 android.api = 33
-android.minapi = 23
+# Python 3.14 uses preadv/pwritev, which require Android API 24 or newer.
+android.minapi = 24
 android.ndk = 25b
-android.ndk_api = 23
+android.ndk_api = 24
 android.archs = armeabi-v7a, arm64-v8a
 android.private_storage = True
 android.accept_sdk_license = True
