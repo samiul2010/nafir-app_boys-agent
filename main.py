@@ -17,9 +17,9 @@ import zipfile
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 from xml.etree import ElementTree
-
-import requests
 from kivy.app import App
 from kivy.clock import Clock, mainthread
 from kivy.lang import Builder
@@ -312,19 +312,30 @@ class PrimaryLLM:
 
     @staticmethod
     def _post(url: str, headers: dict[str, str], payload: dict[str, Any]) -> dict[str, Any]:
+        request = Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers=headers,
+            method="POST",
+        )
         try:
-            response = requests.post(url, headers=headers, json=payload, timeout=(10, 75))
-            data = response.json()
-        except requests.RequestException as error:
-            raise LLMError(f"নেটওয়ার্ক সমস্যা: {error}") from error
-        except ValueError as error:
-            raise LLMError("LLM service বৈধ JSON উত্তর দেয়নি") from error
-        if not response.ok:
+            with urlopen(request, timeout=75) as response:
+                raw = response.read().decode("utf-8")
+        except HTTPError as error:
+            try:
+                data = json.loads(error.read().decode("utf-8"))
+            except (UnicodeDecodeError, ValueError):
+                data = {}
             detail = data.get("error", data.get("message", "অজানা সমস্যা"))
             if isinstance(detail, dict):
                 detail = detail.get("message", str(detail))
-            raise LLMError(f"LLM service error ({response.status_code}): {detail}")
-        return data
+            raise LLMError(f"LLM service error ({error.code}): {detail}") from error
+        except (URLError, TimeoutError, OSError) as error:
+            raise LLMError(f"নেটওয়ার্ক সমস্যা: {error}") from error
+        try:
+            return json.loads(raw)
+        except (UnicodeDecodeError, ValueError) as error:
+            raise LLMError("LLM service বৈধ JSON উত্তর দেয়নি") from error
 
     def _openai_compatible(self, provider: str, key: str, model: str, messages: list[dict[str, str]], context: str) -> str:
         base = "https://api.openai.com/v1/chat/completions" if provider == "OpenAI" else "https://api.deepseek.com/chat/completions"
