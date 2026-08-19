@@ -22,6 +22,9 @@ android.archs = armeabi-v7a, arm64-v8a
 # Use the upstream p4a fix for stale/corrupted build venv pip files.
 p4a.branch = develop
 p4a.commit = 0382d27de2f7315ed98e74884bafb30365decdee
+# Buildozer invokes p4a from .buildozer/android/platform/python-for-android;
+# four parent levels reach the project root where the Kivy override lives.
+p4a.local_recipes = ../../../../p4a-recipes/
 android.private_storage = True
 android.accept_sdk_license = True
 android.allow_backup = False
