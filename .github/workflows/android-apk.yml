@@ -58,6 +58,13 @@ jobs:
           python -m pip install 'Cython==0.29.36' 'buildozer==1.5.0'
           buildozer --version
 
+      - name: Install local p4a recipes
+        run: |
+          sudo rm -rf /home/p4a-recipes
+          sudo mkdir -p /home/p4a-recipes/kivy
+          sudo cp p4a-recipes/kivy/__init__.py /home/p4a-recipes/kivy/__init__.py
+          sudo chmod -R a+rX /home/p4a-recipes
+
       - name: Build Android debug APK
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
