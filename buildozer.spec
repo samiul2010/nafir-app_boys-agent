@@ -5,7 +5,9 @@ package.domain = com.voicecrew
 source.dir = .
 source.include_exts = py,kv,txt,md,json
 version = 0.4.0
-requirements = python3,kivy==2.3.1,requests,pypdf,pyjnius
+# requests 2.25.1 uses the pure-Python chardet path and avoids the unsupported
+# charset-normalizer cp314 Android wheel selected by newer requests releases.
+requirements = python3,kivy==2.3.1,requests==2.25.1,pypdf,pyjnius
 orientation = portrait
 fullscreen = 0
 android.permissions = INTERNET,RECORD_AUDIO
