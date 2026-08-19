@@ -12,7 +12,8 @@ android.permissions = INTERNET,RECORD_AUDIO
 android.api = 33
 # Python 3.14 uses preadv/pwritev, which require Android API 24 or newer.
 android.minapi = 24
-android.ndk = 25b
+# p4a develop/libthorvg requires the current NDK layout for libomp.so.
+android.ndk = 28c
 android.ndk_api = 24
 android.archs = armeabi-v7a, arm64-v8a
 
